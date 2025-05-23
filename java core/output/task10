@@ -1,0 +1,16 @@
+Guess a number between 1 and 100: 45
+Too high!
+Guess a number between 1 and 100: 99
+Too high!
+Guess a number between 1 and 100: 7
+Too low!
+Guess a number between 1 and 100: 32
+Too high!
+Guess a number between 1 and 100: 22
+Too low!
+Guess a number between 1 and 100: 30
+Too high!
+Guess a number between 1 and 100: 24
+Too high!
+Guess a number between 1 and 100: 23
+Correct! You guessed the number.
