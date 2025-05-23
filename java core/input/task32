@@ -1,0 +1,29 @@
+import java.sql.*;
+
+class StudentDAO {
+    Connection con;
+
+    StudentDAO() throws Exception {
+        con = DriverManager.getConnection("jdbc:sqlite:students.db");
+    }
+
+    void insertStudent(int id, String name) throws Exception {
+        PreparedStatement ps = con.prepareStatement("INSERT INTO students VALUES(?, ?)");
+        ps.setInt(1, id);
+        ps.setString(2, name);
+        ps.executeUpdate();
+    }
+
+    void updateStudent(int id, String name) throws Exception {
+        PreparedStatement ps = con.prepareStatement("UPDATE students SET name = ? WHERE id = ?");
+        ps.setString(1, name);
+        ps.setInt(2, id);
+        ps.executeUpdate();
+    }
+
+    public static void main(String[] args) throws Exception {
+        StudentDAO dao = new StudentDAO();
+        dao.insertStudent(1, "Alice");
+        dao.updateStudent(1, "Alicia");
+    }
+}
