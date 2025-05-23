@@ -1,0 +1,13 @@
+Enter student ID and name (type -1 to stop):
+1
+Harry
+2
+Potter
+3
+Rosie
+-1
+
+
+
+Enter ID to search: 2
+Name: Potter
