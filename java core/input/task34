@@ -6,6 +6,8 @@ public class Utility {
     }
 }
 
+
+
 package com.greetings;
 
 import com.utils.Utility;
@@ -14,4 +16,18 @@ class Greet {
     public static void main(String[] args) {
         System.out.println(Utility.getMessage());
     }
+}
+
+
+
+
+module com.utils {
+    exports com.utils;
+}
+
+
+
+
+module com.greetings {
+    requires com.utils;
 }
