@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Community Event Portal</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body { font-family: Arial; background: #eef2f3; padding: 20px; }
+    .event { border: 1px solid #ccc; padding: 10px; margin: 10px 0; background: #fff; }
+    .hidden { display: none; }
+    .spinner { display: none; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <h1>Local Community Event Portal</h1>
+  <input type="text" id="search" placeholder="Search by name">
+  <select id="categoryFilter">
+    <option value="">All</option>
+    <option value="music">Music</option>
+    <option value="workshop">Workshop</option>
+  </select>
+  <div id="eventContainer"></div>
+  <form id="registerForm">
+    <input type="text" name="name" placeholder="Name">
+    <input type="email" name="email" placeholder="Email">
+    <select name="selectedEvent"></select>
+    <button id="registerBtn" type="submit">Register</button>
+    <p class="error"></p>
+  </form>
+  <div class="spinner">Loading...</div>
+  <script>
+    console.log("Welcome to the Community Portal")
+    window.onload = function () {
+      alert("Page fully loaded")
+    }
+
+    const events = [
+      { name: "Music Night", date: "2025-06-20", seats: 10, category: "music" },
+      { name: "Food Carnival", date: "2025-06-25", seats: 0, category: "food" },
+      { name: "Baking Workshop", date: "2025-07-01", seats: 5, category: "workshop" }
+    ]
+
+    function displayEvents(eventList) {
+      const container = document.getElementById("eventContainer")
+      container.innerHTML = ""
+      const eventSelect = document.querySelector("select[name='selectedEvent']")
+      eventSelect.innerHTML = ""
+      eventList.forEach(event => {
+        if (new Date(event.date) > new Date() && event.seats > 0) {
+          const div = document.createElement("div")
+          div.className = "event"
+          div.innerHTML = `<strong>${event.name}</strong> - ${event.date} - Seats: ${event.seats}`
+          const btn = document.createElement("button")
+          btn.innerText = "Register"
+          btn.onclick = () => registerUser(event)
+          div.appendChild(btn)
+          container.appendChild(div)
+          const option = document.createElement("option")
+          option.value = event.name
+          option.textContent = event.name
+          eventSelect.appendChild(option)
+        }
+      })
+    }
+
+    function registerUser(event) {
+      try {
+        if (event.seats > 0) {
+          event.seats--
+          alert(`Registered for ${event.name}`)
+          displayEvents(events)
+        } else {
+          alert("No seats available")
+        }
+      } catch (e) {
+        console.error("Registration error", e)
+      }
+    }
+
+    function filterEventsByCategory(category) {
+      return events.filter(e => category === "" || e.category === category)
+    }
+
+    document.getElementById("categoryFilter").onchange = function () {
+      const category = this.value
+      const filtered = filterEventsByCategory(category)
+      displayEvents(filtered)
+    }
+
+    document.getElementById("search").addEventListener("keydown", function () {
+      const keyword = this.value.toLowerCase()
+      const filtered = events.filter(e => e.name.toLowerCase().includes(keyword))
+      displayEvents(filtered)
+    })
+
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      e.preventDefault()
+      const name = this.elements["name"].value
+      const email = this.elements["email"].value
+      const selected = this.elements["selectedEvent"].value
+      if (!name || !email || !selected) {
+        document.querySelector(".error").textContent = "All fields required"
+        return
+      }
+      document.querySelector(".error").textContent = ""
+      document.querySelector(".spinner").style.display = "block"
+      setTimeout(() => {
+        fetch("https://jsonplaceholder.typicode.com/posts", {
+          method: "POST",
+          body: JSON.stringify({ name, email, event: selected }),
+          headers: { "Content-type": "application/json; charset=UTF-8" }
+        })
+        .then(response => response.json())
+        .then(data => {
+          document.querySelector(".spinner").style.display = "none"
+          alert("Registration successful")
+        })
+        .catch(err => {
+          document.querySelector(".spinner").style.display = "none"
+          alert("Error during registration")
+        })
+      }, 1000)
+    })
+
+    $(document).ready(function () {
+      $(".event").fadeIn()
+      $("#registerBtn").click(() => console.log("Register clicked"))
+    })
+
+    displayEvents(events)
+  </script>
+</body>
+</html>
