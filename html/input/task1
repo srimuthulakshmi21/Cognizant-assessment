@@ -1,1 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Local Community Event Portal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('background.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background: #004d99;
+      padding: 1em;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    #welcomeBanner {
+      background: rgba(0, 102, 204, 0.7);
+      color: white;
+      padding: 1em;
+      text-align: center;
+    }
+
+    .announcement {
+      color: red;
+      font-weight: bold;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: white;
+    }
+
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+    }
+
+    td {
+      padding: 10px;
+    }
+
+    .event-img {
+      border: 3px solid #333;
+      width: 250px;
+      height: 150px;
+      transition: transform 0.5s;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.9);
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      font-weight: bold;
+    }
+
+    label {
+      align-self: flex-start;
+    }
+
+    output {
+      display: block;
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+    }
+
+    video {
+      display: block;
+      margin: 20px auto;
+      border: 3px solid #004d99;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body onbeforeunload="return confirmExit();">
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#events">Events</a>
+    <a href="#contact">Register</a>
+    <a href="help.html" target="_blank">Help</a>
+  </nav>
+
+  <!-- Main -->
+  <section id="home">
+    <div id="welcomeBanner">
+      <h1>Welcome, User!</h1>
+      <p class="announcement">Limited Time Offers! Join your community today.</p>
+      <p class="highlight">Stay connected and informed.</p>
+    </div>
+  </section>
+
+  <!-- Events Section -->
+  <section id="events">
+    <h2 style="text-align:center; font-weight:bold;">Community Event Gallery</h2>
+    <table>
+      <caption><strong>Past Community Events</strong></caption>
+      <tr>
+        <td>
+          <figure style="text-align:center;">
+            <img src="event1.jpg" alt="Event Planning" title="Event Planning" class="event-img" ondblclick="enlarge(this)">
+            <figcaption>Lantern Festival</figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure style="text-align:center;">
+            <img src="event2.jpg" alt="Health Camp" title="Health Camp" class="event-img">
+            <figcaption>Health Camp</figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure style="text-align:center;">
+            <img src="event3.jpg" alt="Music Night" title="Music Night" class="event-img">
+            <figcaption>Music Night</figcaption>
+          </figure>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <figure style="text-align:center;">
+            <img src="event4.jpg" alt="Tree Plantation" title="Tree Plantation" class="event-img">
+            <figcaption>Tree Plantation</figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure style="text-align:center;">
+            <img src="event5.jpg" alt="Job Fair" title="Job Fair" class="event-img">
+            <figcaption>Job Fair</figcaption>
+          </figure>
+        </td>
+        <td>
+          <figure style="text-align:center;">
+            <img src="event6.jpg" alt="Food Drive" title="Food Drive" class="event-img">
+            <figcaption>Food Drive</figcaption>
+          </figure>
+        </td>
+      </tr>
+    </table>
+  </section>
+
+  <!-- Contact / Registration Form -->
+  <section id="contact">
+    <h2 style="text-align:center; font-weight:bold;">Register for an Event</h2>
+    <form id="regForm" onsubmit="showOutput(event)">
+      <label for="name">Your Name:</label>
+      <input type="text" name="name" id="name" required autofocus><br>
+
+      <label for="email">Your Email:</label>
+      <input type="email" name="email" id="email" required><br>
+
+      <label for="date">Date:</label>
+      <input type="date" name="date" id="date" required><br>
+
+      <label for="eventType">Event:</label>
+      <select name="eventType" id="eventType" onchange="storePreference(); showFee(this)" required>
+        <option value="">Select Event</option>
+        <option value="Health Camp">Health Camp</option>
+        <option value="Music Night">Music Night</option>
+        <option value="Job Fair">Job Fair</option>
+      </select><br>
+
+      <label for="msg">Message:</label>
+      <textarea id="msg" placeholder="Your Message" onkeyup="countCharacters()" required></textarea><br>
+
+      <label for="phone">Phone Number:</label>
+      <input type="text" id="phone" placeholder="Phone Number" onblur="validatePhone()" required><br>
+
+      <button type="submit">Submit</button>
+      <output id="confirmation"></output>
+      <p id="charCount">Characters: 0</p>
+    </form>
+
+    <div style="text-align:center;">
+      <button onclick="clearPreferences()">Clear Preferences</button>
+      <button onclick="findLocation()">Find Nearby Events</button>
+      <p id="location"></p>
+    </div>
+  </section>
+
+  <!-- Video -->
+  <section>
+    <h2 style="text-align:center; font-weight:bold;">Watch Our Promo</h2>
+    <video width="600" controls oncanplay="videoReady()">
+      <source src="invite.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <p id="videoMsg" style="text-align:center;"></p>
+  </section>
+
+  <!-- Footer -->
+  <footer style="text-align:center; padding:1em; background:#222; color:white;">
+    &copy; 2025 Local City Council. All rights reserved.
+  </footer>
+
+  <script>
+    function showOutput(event) {
+      event.preventDefault();
+      document.getElementById('confirmation').value = "Thank you! Your registration is received.";
+    }
+
+    function validatePhone() {
+      const phone = document.getElementById("phone").value;
+      if (!/^[0-9]{10}$/.test(phone)) {
+        alert("Enter a valid 10-digit phone number.");
+      }
+    }
+
+    function showFee(select) {
+      if (select.value) {
+        alert("Selected Event Fee: ₹500");
+      }
+    }
+
+    function enlarge(img) {
+      img.style.transform = "scale(1.2)";
+      setTimeout(() => img.style.transform = "scale(1)", 1500);
+    }
+
+    function countCharacters() {
+      const msg = document.getElementById("msg").value.length;
+      document.getElementById("charCount").innerText = "Characters: " + msg;
+    }
+
+    function videoReady() {
+      document.getElementById("videoMsg").innerText = "Video ready to play";
+    }
+
+    function confirmExit() {
+      return "You have unsaved changes. Are you sure you want to leave?";
+    }
+
+    function storePreference() {
+      const eventType = document.getElementById("eventType").value;
+      localStorage.setItem("preferredEvent", eventType);
+    }
+
+    function loadPreference() {
+      const eventType = localStorage.getItem("preferredEvent");
+      if (eventType) {
+        document.getElementById("eventType").value = eventType;
+      }
+    }
+
+    function clearPreferences() {
+      localStorage.clear();
+      sessionStorage.clear();
+      alert("Preferences cleared.");
+    }
+
+    function findLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError, {
+          enableHighAccuracy: true,
+          timeout: 5000
+        });
+      } else {
+        document.getElementById("location").innerText = "Geolocation not supported.";
+      }
+    }
+
+    function showPosition(position) {
+      document.getElementById("location").innerText =
+        "Latitude: " + position.coords.latitude + ", Longitude: " + position.coords.longitude;
+    }
+
+    function showError(error) {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          alert("User denied the request for Geolocation.");
+          break;
+        case error.TIMEOUT:
+          alert("Request timed out.");
+          break;
+      }
+    }
+
+    window.onload = loadPreference;
+  </script>
+
+</body>
+</html>
 
